@@ -419,7 +419,7 @@ def admindonations():
     return render_template('admindonations.html')
 
 @app.route('/utilizations')
-def myutilisations():
+def utilizations():
     contract,web3=connect_with_blockchain(0)
     _rpurpose,_ramount,_rusernames,_rids,_rstatus,_rdonations=contract.functions.viewRequests().call()
     data=[]
@@ -449,9 +449,27 @@ def distribution():
         contract,web3=connect_with_blockchain(0)
         tx_hash=contract.functions.addUtilisation(session['username'],purpose,int(amount),filehash,reqid).transact()
         web3.eth.waitForTransactionReceipt(tx_hash)
-        return render_template('utilizations.html',status='utilization updated')
+        contract,web3=connect_with_blockchain(0)
+        _rpurpose,_ramount,_rusernames,_rids,_rstatus,_rdonations=contract.functions.viewRequests().call()
+        data=[]
+        for i in range(len(_rpurpose)):
+            if _rusernames[i]==session['username']:
+                dummy=[]
+                dummy.append(_rids[i])
+                dummy.append(_rpurpose[i])
+                data.append(dummy)
+        return render_template('utilizations.html',status='utilization updated',l1=len(data),dashboard_data=data)
     except:
-        return render_template('utilization.html',status='already uploaded')
+        contract,web3=connect_with_blockchain(0)
+        _rpurpose,_ramount,_rusernames,_rids,_rstatus,_rdonations=contract.functions.viewRequests().call()
+        data=[]
+        for i in range(len(_rpurpose)):
+            if _rusernames[i]==session['username']:
+                dummy=[]
+                dummy.append(_rids[i])
+                dummy.append(_rpurpose[i])
+                data.append(dummy)
+        return render_template('utilizations.html',status='already uploaded',l1=len(data),dashboard_data=data)
 
 @app.route('/myutilizations')
 def myutilizations():
