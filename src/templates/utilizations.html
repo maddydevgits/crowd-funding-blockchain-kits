@@ -153,14 +153,14 @@
         </div>
         <div class="login-container">
             <h2>Distribute</h2><br>
-            <form action="/distribution" method="post">
+            <form action="/distribution" method="post" enctype="multipart/form-data">
                 <select name="reqid" id="">
                     {%for i in range(0, l1)%}
                         <option value="{{dashboard_data[i][0]}}">{{dashboard_data[i][1]}}</option>
                     {%endfor%}
                 </select>
                 <input type="text" name="purpose" placeholder="Purpose of utilization" required>
-                <input type="password" name="amount" placeholder="Amount utilized" required>
+                <input type="text" name="amount" placeholder="Amount utilized" required>
                 <input type="file" name="chooseFile" placeholder="Choose Invoice">
                 <input type="submit" value="Distribute">
             </form>
